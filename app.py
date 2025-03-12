@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from time import time
 import pyttsx3
+from flask_cors import CORS
 
 from chattf import process_message
 
@@ -9,6 +10,7 @@ from threading import Thread
 
 
 app = Flask(__name__)
+CORS(app)
 
 def display_speak(text):
     engine = pyttsx3.init()
@@ -40,4 +42,4 @@ def predict():
     # Return the JSON response with the answer
     return jsonify(message)
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run("0.0.0.0")
