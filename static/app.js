@@ -46,7 +46,20 @@ class Chatbox {
         let msg1 = { name: "User", message: text1 }
         this.messages.push(msg1);
 
-        fetch('http://127.0.0.1:5000/predict', {
+
+        // Get the protocol (http: or https:)
+        const protocol = window.location.protocol;
+
+        // Get the hostname (e.g., 'www.example.com')
+        const hostname = window.location.hostname;
+
+        // Get the port number (e.g., '3000'); returns an empty string if the port is the default for the protocol
+        const port = window.location.port ? `:${window.location.port}` : '';
+
+        // Construct the base URL
+        const baseUrl = `${protocol}//${hostname}${port}`;
+
+        fetch('baseUrl/predict', {
             method: 'POST',
             body: JSON.stringify({ message: text1 }),
             mode: 'cors',

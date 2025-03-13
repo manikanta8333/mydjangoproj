@@ -44,8 +44,17 @@ class Chatbox {
             return;
         }
 
+       
+
+        // Now, you can use baseUrl to construct your API endpoint
+        //const apiUrl = `${baseUrl}/predict`;
+
+
+        let msg1 = { name: "User", message: text1 }
+        this.messages.push(msg1);
+
         // Get the protocol (http: or https:)
-    	const protocol = window.location.protocol;
+        const protocol = window.location.protocol;
 
         // Get the hostname (e.g., 'www.example.com')
         const hostname = window.location.hostname;
@@ -55,13 +64,6 @@ class Chatbox {
 
         // Construct the base URL
         const baseUrl = `${protocol}//${hostname}${port}`;
-
-        // Now, you can use baseUrl to construct your API endpoint
-        //const apiUrl = `${baseUrl}/predict`;
-
-
-        let msg1 = { name: "User", message: text1 }
-        this.messages.push(msg1);
 
         fetch('baseUrl/predict', {
             method: 'POST',
