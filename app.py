@@ -14,10 +14,10 @@ app = Flask(__name__)
 CORS(app)
 #run_with_ngrok(app)
 
-# def display_speak(text):
-#     engine = pyttsx3.init()
-#     engine.say(text)
-#     engine.runAndWait()
+def display_speak(text):
+    engine = pyttsx3.init()
+    engine.say(text)
+    engine.runAndWait()
 
 
 @app.get("/")
@@ -40,8 +40,8 @@ def predict():
     message = {"answer": response}
     
     # Generate speech in the background
-   # speech_thread = Thread(target=display_speak, args=(response,))
-   # speech_thread.start()
+    speech_thread = Thread(target=display_speak, args=(response,))
+    speech_thread.start()
     
     # Return the JSON response with the answer
     return jsonify(message)
