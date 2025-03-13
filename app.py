@@ -26,6 +26,7 @@ def index_get():
     return render_template("index.html")
 
 @app.post("/predict")
+@app.route("/predict", methods=["POST"])
 def predict():
     text = request.get_json().get("message")
     
@@ -45,4 +46,4 @@ def predict():
     # Return the JSON response with the answer
     return jsonify(message)
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0')
