@@ -59,7 +59,7 @@ class Chatbox {
         // Construct the base URL
         const baseUrl = `${protocol}//${hostname}${port}`;
 
-        fetch('baseUrl/predict', {
+        fetch('/predict', {
             method: 'POST',
             body: JSON.stringify({ message: text1 }),
             mode: 'cors',
