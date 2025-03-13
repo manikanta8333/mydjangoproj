@@ -22,3 +22,6 @@ server {
 
 sudo systemctl restart nginx
 sudo systemctl status nginx
+
+
+sudo kill $(sudo lsof -t -i:5000
