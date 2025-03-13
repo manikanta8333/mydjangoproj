@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 from time import time
 import pyttsx3
 from flask_cors import CORS
+#from flask_ngrok import run_with_ngrok
 
 from chattf import process_message
 
@@ -11,11 +12,13 @@ from threading import Thread
 
 app = Flask(__name__)
 CORS(app)
+#run_with_ngrok(app)
 
-def display_speak(text):
-    engine = pyttsx3.init()
-    engine.say(text)
-    engine.runAndWait()
+# def display_speak(text):
+#     engine = pyttsx3.init()
+#     engine.say(text)
+#     engine.runAndWait()
+
 
 @app.get("/")
 @app.get("/index.html")
@@ -36,10 +39,10 @@ def predict():
     message = {"answer": response}
     
     # Generate speech in the background
-    speech_thread = Thread(target=display_speak, args=(response,))
-    speech_thread.start()
+   # speech_thread = Thread(target=display_speak, args=(response,))
+   # speech_thread.start()
     
     # Return the JSON response with the answer
     return jsonify(message)
 if __name__ == "__main__":
-    app.run("0.0.0.0")
+    app.run()
