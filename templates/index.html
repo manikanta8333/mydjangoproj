@@ -123,13 +123,35 @@
   <script type="text/javascript" src="{{ url_for('static', filename='assets/vendor/swiper/swiper-bundle.min.js') }}"></script> 
 
   <script type="text/javascript" src="{{ url_for('static', filename='assets/js/main.js') }}"></script> 
-  
 
+  <script>
+    // Function to speak the text using the Web Speech API
+    function speakText(text) {
+        const speech = new SpeechSynthesisUtterance(text);
+        speech.lang = "en-US"; // Set language to English (or any other language)
+        window.speechSynthesis.speak(speech);
+    }
 
-
-  
-
- 
+    // Function to send message to the Flask backend
+    function sendMessage() {
+        const message = document.getElementById("user-message").value;  // Assuming an input field for user message
+        fetch('/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ "message": message })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.answer) {
+                document.getElementById("response").innerText = data.answer;
+                speakText(data.answer);  // Speak the response in the browser
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    }
+</script>
 
   
 

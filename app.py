@@ -3,7 +3,7 @@ from time import time
 import pyttsx3
 from flask_cors import CORS
 #from flask_ngrok import run_with_ngrok
-
+from flask_socketio import SocketIO, emit
 from chattf import process_message
 
 from threading import Thread
@@ -12,7 +12,13 @@ from threading import Thread
 
 app = Flask(__name__)
 CORS(app)
+socketio = SocketIO(app)
 #run_with_ngrok(app)
+
+@socketio.on('message')
+def handle_message(msg):
+    response = process_message(msg)
+    emit('response', {'answer': response})
 
 def display_speak(text):
     engine = pyttsx3.init()

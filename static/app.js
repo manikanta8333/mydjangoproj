@@ -25,80 +25,70 @@ class Chatbox {
         })
     }
 
-    toggleState(chatbox) {
-        this.state = !this.state;
-
-        // show or hides the box
-        if(this.state) {
-            chatbox.classList.add('chatbox--active')
-        } else {
-            chatbox.classList.remove('chatbox--active')
-        }
-    }
-
-    onSendButton(chatbox) {
-        var textField = chatbox.querySelector('input');
-        let text1 = textField.value
-        if (text1 === "") {
+    onSendButton(chatBox) {
+        let textField = chatBox.querySelector('input');
+        let text = textField.value;
+        if (text === "") {
             return;
         }
 
-        let msg1 = { name: "User", message: text1 }
+        let msg1 = { name: "User", message: text };
         this.messages.push(msg1);
-
-
-        // Get the protocol (http: or https:)
-        const protocol = window.location.protocol;
-
-        // Get the hostname (e.g., 'www.example.com')
-        const hostname = window.location.hostname;
-
-        // Get the port number (e.g., '3000'); returns an empty string if the port is the default for the protocol
-        const port = window.location.port ? `:${window.location.port}` : '';
-
-        // Construct the base URL
-        const baseUrl = `${protocol}//${hostname}${port}`;
+        textField.value = "";
 
         fetch('/predict', {
             method: 'POST',
-            body: JSON.stringify({ message: text1 }),
+            body: JSON.stringify({ message: text }),
             mode: 'cors',
             headers: {
-              'Content-Type': 'application/json'
+                'Content-Type': 'application/json'
             },
-          })
-          .then(r => r.json())
-          .then(r => {
-            let msg2 = { name: "Sam", message: r.answer };
+        })
+        .then(r => r.json())
+        .then(r => {
+            let msg2 = { name: "Bot", message: r.answer };
             this.messages.push(msg2);
-            this.updateChatText(chatbox)
-            textField.value = ''
-
+            this.updateChatText(chatBox)
+            this.speakResponse(r.answer); // Add speech synthesis
         }).catch((error) => {
             console.error('Error:', error);
-            this.updateChatText(chatbox)
-            textField.value = ''
-          });
+            this.updateChatText(chatBox)
+        });
     }
 
-    updateChatText(chatbox) {
-        var html = '';
+    speakResponse(message) {
+        const speech = new SpeechSynthesisUtterance(message);
+        speech.lang = 'en-US';
+        speech.volume = 1;
+        speech.rate = 1;
+        speech.pitch = 1;
+        window.speechSynthesis.speak(speech);
+    }
+
+    updateChatText(chatBox) {
+        let html = '';
         this.messages.slice().reverse().forEach(function(item, index) {
-            if (item.name === "Sam")
-            {
+            if (item.name === "Bot") {
                 html += '<div class="messages__item messages__item--visitor">' + item.message + '</div>'
-            }
-            else
-            {
+            } else {
                 html += '<div class="messages__item messages__item--operator">' + item.message + '</div>'
             }
-          });
+        });
 
-        const chatmessage = chatbox.querySelector('.chatbox__messages');
-        chatmessage.innerHTML = html;
+        const chatMessage = chatBox.querySelector('.chatbox__messages');
+        chatMessage.innerHTML = html;
+    }
+
+    toggleState(chatBox) {
+        this.state = !this.state;
+
+        if (this.state) {
+            chatBox.classList.add('chatbox--active')
+        } else {
+            chatBox.classList.remove('chatbox--active')
+        }
     }
 }
-
 
 const chatbox = new Chatbox();
 chatbox.display();
